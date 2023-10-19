@@ -1,5 +1,5 @@
 import { getContainerEl, setupHooks } from "@cypress/mount-utils";
-import { render } from "solid-js/web";
+import { transpileSync } from "@stencil/core/compiler";
 
 let dispose: () => void;
 
@@ -12,14 +12,16 @@ interface MountingOptions {
 }
 
 export function mount(
-  component: Parameters<typeof render>[0],
+  component: Parameters<typeof String>[0],
   options: MountingOptions = {}
 ) {
   // rendering/mounting function.
   const root = getContainerEl();
 
   // Render component with your library's relevant
-  dispose = render(component, root);
+  const compiled = transpileSync(component);
+  const toMount = document.createElement(compiled.code);
+  dispose = () => {root.appendChild(toMount)};
 
   return cy.wait(0, { log: false }).then(() => {
     if (options.log !== false) {

@@ -1,28 +1,14 @@
 import { defineComponentFramework } from "cypress";
 
-const dep: Cypress.CypressComponentDependency = {
-  // Unique, semantic identifier.
-  type: "template-name",
-
-  // Human readable name.
-  name: "Dependency Name",
-
-  // Package name install from `npm`.
-  package: "dependency-name",
-
-  /**
-   * Similar to package, but can include a version or tag.
-   * Used during setup to generate an install command for users.
-   * Eg: `solid-js@next`
-   */
-  installer: "dependency-name@^1.0.0",
-
-  // Human readable description.
-  description: "A required dependency for this project",
-
-  // Minimum supported version.
-  minVersion: "^1.0.0",
-};
+const stencilDep: Cypress.CypressComponentDependency = {
+  type: "@stencil/core",
+  name: "StencilJS",
+  package: "@stencil/core",
+  installer: "@stencil/core",
+  description:
+    "A library for building reusable, scalable component libraries.",
+  minVersion: "^3.0.0",
+}
 
 /**
  * The definition.
@@ -34,33 +20,17 @@ export default defineComponentFramework({
    * by Cypress is `cypress-ct-*` for global packages, or
    * `@org/cypress-ct-*` for organization level packages.
    */
-  type: "cypress-ct-template",
-
-  /**
-   * The label that shows up when configuring Component Testing
-   * for the first time.
-   */
-  name: "Example Dependency",
-
-  /**
-   * Supported bundlers. Can be "webpack" and/or "vite".
-   */
+  type: "cypress-ct-stenciljs",
+  name: "StencilJS",
   supportedBundlers: ["vite", "webpack"],
 
   /**
    * Used by Cypress to automatically detect the correct Framework Definition
    * based on the user's project.
-   * In this example, if a module matching `solidDep`
-   * is found in the user's project,
-   * Solid.js will automatically be selected when configuring Component Testing.
    */
-  detectors: [dep],
+  detectors: [stencilDep],
 
-  /**
-   * Optionally, some conditional logic, based on whether
-   * the user selected Vite or webpack.
-   */
-  dependencies: (bundler) => {
-    return [dep];
-  },
+  /* stencil is its own bundler. doesn't need either webpack or vite. 
+  */
+ dependencies: () => { return [stencilDep];}
 });

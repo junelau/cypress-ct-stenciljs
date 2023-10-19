@@ -21,7 +21,8 @@ export function mount(
   // Render component with your library's relevant
   const compiled = transpileSync(component);
   const toMount = document.createElement(compiled.code);
-  dispose = () => {root.appendChild(toMount)};
+  root.appendChild(toMount);
+  dispose = () => {};
 
   return cy.wait(0, { log: false }).then(() => {
     if (options.log !== false) {
